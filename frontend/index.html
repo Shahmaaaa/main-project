@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block-Aid - AI-Powered Disaster Relief</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0066cc;
+            --primary-light: #3d96e6;
+            --secondary: #00b894;
+            --secondary-light: #55d4a7;
+            --accent: #ff6b6b;
+            --dark-bg: #0a0e14;
+            --darker-bg: #050709;
+            --card-bg: #151b2a;
+            --card-hover: #1a2138;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b8c1;
+            --border: #2d3748;
+            --success: #00b894;
+            --error: #ff6b6b;
+            --warning: #ffa500;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 14, 20, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 16px 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .logo span {
+            font-size: 28px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-outline {
+            padding: 10px 20px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0, 102, 204, 0.4);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.05), rgba(0, 184, 148, 0.05));
+            position: relative;
+            overflow: hidden;
+            margin-top: 70px;
+            padding: 60px 24px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 102, 204, 0.15), transparent);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 184, 148, 0.15), transparent);
+            border-radius: 50%;
+            bottom: -100px;
+            left: -100px;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(30px); }
+        }
+
+        .hero-content {
+            max-width: 800px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .hero-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.8;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-large {
+            padding: 16px 36px;
+            font-size: 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-large-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+        }
+
+        .btn-large-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0, 102, 204, 0.4);
+        }
+
+        .btn-large-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-large-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            max-width: 1200px;
+            margin: 120px auto;
+            padding: 0 24px;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .flow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            position: relative;
+        }
+
+        .flow-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flow-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: left;
+        }
+
+        .flow-card:hover {
+            background: var(--card-hover);
+            border-color: var(--primary);
+            transform: translateY(-8px);
+        }
+
+        .flow-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .flow-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin: 0 auto 20px;
+        }
+
+        .flow-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .flow-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1200px;
+            margin: 120px auto;
+            padding: 0 24px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            background: var(--card-hover);
+            border-color: var(--primary);
+            transform: translateY(-8px);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Impact Section */
+        .impact {
+            max-width: 1200px;
+            margin: 120px auto;
+            padding: 0 24px;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+            text-align: center;
+        }
+
+        .impact-item h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .impact-item p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+            margin: 120px 24px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .cta p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            margin-bottom: 32px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker-bg);
+            border-top: 1px solid var(--border);
+            padding: 60px 24px 40px;
+            margin-top: 120px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .footer-section a {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 12px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Modal for navigation pages */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            overflow: auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--dark-bg);
+            margin: 5% auto;
+            padding: 40px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close-modal {
+            color: var(--text-secondary);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-large {
+                width: 100%;
+            }
+
+            .impact-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cta {
+                margin: 60px 12px;
+                padding: 40px 24px;
+            }
+
+            .cta h2 {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-container {
+                padding: 0 16px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .hero {
+                margin-top: 60px;
+                padding: 40px 16px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .hero-description {
+                font-size: 14px;
+            }
+
+            .section-title {
+                font-size: 24px;
+                margin-bottom: 40px;
+            }
+
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo" onclick="navigateTo('home')">
+                <span>⚡</span>
+                Block-Aid
+            </div>
+            <ul class="nav-links">
+                <li><a href="#how-it-works" onclick="navigateTo('how-it-works'); return false;">How It Works</a></li>
+                <li><a href="#features" onclick="navigateTo('features'); return false;">Features</a></li>
+                <li><a href="#impact" onclick="navigateTo('impact'); return false;">Impact</a></li>
+                <li><a href="#about" onclick="navigateTo('about'); return false;">About</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <button class="btn-outline" onclick="openModal('userLoginModal')">User Login</button>
+                <button class="btn-primary" onclick="openModal('adminLoginModal')">Admin</button>
+            </div>
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Block-<span>Aid</span></h1>
+            <p class="hero-subtitle">AI-Powered Disaster Relief</p>
+            <p class="hero-description">
+                Leveraging artificial intelligence and blockchain technology to create transparent, efficient disaster relief management systems that save lives and rebuild communities.
+            </p>
+            <div class="hero-buttons">
+                <button class="btn-large btn-large-primary" onclick="openModal('reportDisasterModal')">Report Disaster</button>
+                <button class="btn-large btn-large-outline" onclick="navigateTo('about')">Learn More</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <h2 class="section-title">How <span>Block-Aid</span> Works</h2>
+        <div class="flow-grid">
+            <div class="flow-card">
+                <div class="flow-number">1</div>
+                <h3>Disaster Detection</h3>
+                <p>AI models detect and analyze disaster events in real-time using satellite imagery and sensor data.</p>
+            </div>
+            <div class="flow-card">
+                <div class="flow-number">2</div>
+                <h3>Impact Assessment</h3>
+                <p>Advanced algorithms calculate severity levels and affected area for quick decision-making.</p>
+            </div>
+            <div class="flow-card">
+                <div class="flow-number">3</div>
+                <h3>Resource Allocation</h3>
+                <p>Optimize distribution of relief resources using blockchain-verified smart contracts.</p>
+            </div>
+            <div class="flow-card">
+                <div class="flow-number">4</div>
+                <h3>Transparent Tracking</h3>
+                <p>Track every transaction and resource movement on an immutable blockchain ledger.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title">Powerful <span>Features</span></h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>AI Severity Prediction</h3>
+                <p>Machine learning models predict disaster severity and resource requirements with 95%+ accuracy.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⛓️</div>
+                <h3>Blockchain Verification</h3>
+                <p>Every transaction is verified and immutable, ensuring complete transparency in relief distribution.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Real-Time Monitoring</h3>
+                <p>Live dashboards show disaster progression, resource allocation, and impact metrics.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Smart Contracts</h3>
+                <p>Automated fund distribution reduces overhead and ensures resources reach those in need faster.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3>Global Coverage</h3>
+                <p>Support for multiple disaster types across different geographical regions worldwide.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Enterprise Security</h3>
+                <p>Military-grade encryption and multi-signature authentication for sensitive operations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="impact" id="impact">
+        <h2 class="section-title">Our <span>Impact</span></h2>
+        <div class="impact-grid">
+            <div class="impact-item">
+                <h2>98%</h2>
+                <p>Accuracy Rate</p>
+            </div>
+            <div class="impact-item">
+                <h2>150+</h2>
+                <p>Regions Covered</p>
+            </div>
+            <div class="impact-item">
+                <h2>$10M+</h2>
+                <p>Relief Distributed</p>
+            </div>
+            <div class="impact-item">
+                <h2>50K+</h2>
+                <p>Lives Impacted</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <h2>Ready to Make a Difference?</h2>
+        <p>Join the Block-Aid network and help coordinate disaster relief efforts with transparency and efficiency.</p>
+        <div class="hero-buttons">
+            <button class="btn-large btn-large-primary" onclick="openModal('reportDisasterModal')" style="background: white; color: var(--primary);">Report Disaster</button>
+            <button class="btn-large btn-large-outline" onclick="openModal('userLoginModal')" style="color: white; border-color: white;">Get Started</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Product</h4>
+                <a href="#">Features</a>
+                <a href="#">Pricing</a>
+                <a href="#">Security</a>
+                <a href="#">Roadmap</a>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <a href="#">Documentation</a>
+                <a href="#">API Reference</a>
+                <a href="#">Blog</a>
+                <a href="#">Support</a>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <a href="#">About Us</a>
+                <a href="#">Careers</a>
+                <a href="#">Blog</a>
+                <a href="#">Press</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Block-Aid. Decentralized Disaster Relief for a Better World. Built with blockchain technology for transparency and trust.</p>
+        </div>
+    </footer>
+
+    <!-- User Login Modal -->
+    <div id="userLoginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('userLoginModal')">&times;</span>
+            <div style="text-align: center; margin-bottom: 32px;">
+                <div style="font-size: 48px; margin-bottom: 16px;">⚡</div>
+                <h2 style="font-family: 'Poppins', sans-serif; font-size: 28px; margin-bottom: 8px;">Block-Aid</h2>
+                <p style="color: var(--text-secondary);">User Login</p>
+            </div>
+            <form id="userLoginForm" style="max-width: 400px; margin: 0 auto;">
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Email Address</label>
+                    <input type="email" placeholder="your.email@example.com" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                </div>
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Password</label>
+                    <input type="password" placeholder="Enter your password" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                </div>
+                <button type="submit" style="width: 100%; padding: 14px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px;">Sign In</button>
+            </form>
+            <div style="text-align: center; margin-top: 24px; color: var(--text-secondary); font-size: 14px;">
+                Don't have an account? <a href="#" onclick="closeModal('userLoginModal'); openModal('userSignupModal'); return false;" style="color: var(--primary); text-decoration: none; font-weight: 600;">Create one</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="adminLoginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('adminLoginModal')">&times;</span>
+            <div style="text-align: center; margin-bottom: 32px;">
+                <div style="font-size: 48px; margin-bottom: 16px;">⚡</div>
+                <h2 style="font-family: 'Poppins', sans-serif; font-size: 28px; margin-bottom: 8px;">Block-Aid</h2>
+                <p style="color: var(--text-secondary);">Administrator Login</p>
+            </div>
+            <form id="adminLoginForm" style="max-width: 400px; margin: 0 auto;">
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Email Address</label>
+                    <input type="email" placeholder="admin@example.com" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                </div>
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Password</label>
+                    <input type="password" placeholder="Enter your password" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                </div>
+                <button type="submit" style="width: 100%; padding: 14px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px;">Sign In</button>
+            </form>
+            <div style="text-align: center; margin-top: 24px; color: var(--text-secondary); font-size: 14px;">
+                Don't have an account? <a href="#" onclick="closeModal('adminLoginModal'); openModal('adminSignupModal'); return false;" style="color: var(--primary); text-decoration: none; font-weight: 600;">Create one</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Signup Modal -->
+    <div id="userSignupModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('userSignupModal')">&times;</span>
+            <div style="text-align: center; margin-bottom: 32px;">
+                <div style="font-size: 48px; margin-bottom: 16px;">⚡</div>
+                <h2 style="font-family: 'Poppins', sans-serif; font-size: 28px; margin-bottom: 8px;">Block-Aid</h2>
+                <p style="color: var(--text-secondary);">Create User Account</p>
+            </div>
+            <form id="userSignupForm" style="max-width: 400px; margin: 0 auto;">
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Full Name</label>
+                    <input type="text" placeholder="Your full name" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                </div>
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Email Address</label>
+                    <input type="email" placeholder="your.email@example.com" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                </div>
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Password</label>
+                    <input type="password" placeholder="Create a password" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                </div>
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Confirm Password</label>
+                    <input type="password" placeholder="Confirm your password" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                </div>
+                <button type="submit" style="width: 100%; padding: 14px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px;">Create Account</button>
+            </form>
+            <div style="text-align: center; margin-top: 24px; color: var(--text-secondary); font-size: 14px;">
+                Already have an account? <a href="#" onclick="closeModal('userSignupModal'); openModal('userLoginModal'); return false;" style="color: var(--primary); text-decoration: none; font-weight: 600;">Sign in</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Signup Modal -->
+    <div id="adminSignupModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('adminSignupModal')">&times;</span>
+            <div style="text-align: center; margin-bottom: 32px;">
+                <div style="font-size: 48px; margin-bottom: 16px;">⚡</div>
+                <h2 style="font-family: 'Poppins', sans-serif; font-size: 28px; margin-bottom: 8px;">Block-Aid</h2>
+                <p style="color: var(--text-secondary);">Administrator Registration</p>
+            </div>
+            <form id="adminSignupForm" style="max-width: 400px; margin: 0 auto;">
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Organization Name</label>
+                    <input type="text" placeholder="Your organization" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                </div>
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Admin Email</label>
+                    <input type="email" placeholder="admin@organization.com" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                </div>
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Password</label>
+                    <input type="password" placeholder="Create a secure password" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                </div>
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Confirm Password</label>
+                    <input type="password" placeholder="Confirm your password" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                </div>
+                <button type="submit" style="width: 100%; padding: 14px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px;">Create Admin Account</button>
+            </form>
+            <div style="text-align: center; margin-top: 24px; color: var(--text-secondary); font-size: 14px;">
+                Already have an account? <a href="#" onclick="closeModal('adminSignupModal'); openModal('adminLoginModal'); return false;" style="color: var(--primary); text-decoration: none; font-weight: 600;">Sign in</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Disaster Modal -->
+    <div id="reportDisasterModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('reportDisasterModal')">&times;</span>
+            <div style="text-align: center; margin-bottom: 32px;">
+                <div style="font-size: 48px; margin-bottom: 16px;">📍</div>
+                <h2 style="font-family: 'Poppins', sans-serif; font-size: 28px; margin-bottom: 8px;">Report Disaster</h2>
+                <p style="color: var(--text-secondary);">Help us respond quickly to emergencies</p>
+            </div>
+            <form id="reportDisasterForm" style="max-width: 500px; margin: 0 auto;">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Disaster Type</label>
+                    <select id="disasterType" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                        <option value="">Select disaster type</option>
+                        <option value="earthquake">Earthquake</option>
+                        <option value="flood">Flood</option>
+                        <option value="wildfire">Wildfire</option>
+                        <option value="hurricane">Hurricane</option>
+                        <option value="tornado">Tornado</option>
+                        <option value="tsunami">Tsunami</option>
+                        <option value="landslide">Landslide</option>
+                        <option value="volcanic">Volcanic Eruption</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Location</label>
+                    <input type="text" id="location" placeholder="Enter location (city, country)" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Affected Population</label>
+                    <input type="number" id="affectedPopulation" placeholder="Number of people affected" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Estimated Casualties</label>
+                    <input type="number" id="casualties" placeholder="Number of casualties (if any)" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;">
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Incident Date & Time</label>
+                    <input type="datetime-local" id="incidentTime" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif;" required>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Upload Evidence Images</label>
+                    <input type="file" id="evidenceImage" accept="image/*" multiple style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif; cursor: pointer;">
+                    <p style="font-size: 12px; color: var(--text-secondary); margin-top: 6px;">Supported formats: JPG, PNG, GIF (Max 5MB per image)</p>
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; font-size: 12px;">Description</label>
+                    <textarea id="description" placeholder="Describe the situation, damage, and immediate needs..." style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--text-primary); font-family: 'Inter', sans-serif; resize: vertical; min-height: 100px;" required></textarea>
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); cursor: pointer;">
+                        <input type="checkbox" id="urgentReporting" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary);">
+                        <span>This is an urgent/life-threatening situation requiring immediate response</span>
+                    </label>
+                </div>
+
+                <button type="submit" style="width: 100%; padding: 14px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px;">Submit Report</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Navigation function
+        function navigateTo(section) {
+            const element = document.getElementById(section);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Form submissions
+        document.getElementById('userLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('User login functionality would be connected to backend');
+            closeModal('userLoginModal');
+        });
+
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Admin login functionality would be connected to backend');
+            closeModal('adminLoginModal');
+        });
+
+        document.getElementById('userSignupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('User signup functionality would be connected to backend');
+            closeModal('userSignupModal');
+        });
+
+        document.getElementById('adminSignupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Admin signup functionality would be connected to backend');
+            closeModal('adminSignupModal');
+        });
+
+        document.getElementById('reportDisasterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = {
+                disasterType: document.getElementById('disasterType').value,
+                location: document.getElementById('location').value,
+                affectedPopulation: document.getElementById('affectedPopulation').value,
+                casualties: document.getElementById('casualties').value || 0,
+                incidentTime: document.getElementById('incidentTime').value,
+                description: document.getElementById('description').value,
+                isUrgent: document.getElementById('urgentReporting').checked,
+                images: document.getElementById('evidenceImage').files
+            };
+
+            // Log data (in production, send to backend with FormData for file upload)
+            console.log('Disaster Report:', formData);
+            
+            // Validate required fields
+            if (!formData.disasterType || !formData.location || !formData.affectedPopulation || !formData.incidentTime) {
+                alert('Please fill all required fields');
+                return;
+            }
+
+            // Show success message
+            const urgentTag = formData.isUrgent ? ' [URGENT]' : '';
+            alert(`✓ Disaster report submitted successfully!${urgentTag}\n\nType: ${formData.disasterType}\nLocation: ${formData.location}\nAffected Population: ${formData.affectedPopulation}`);
+            
+            // Reset form
+            this.reset();
+            closeModal('reportDisasterModal');
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+    </script>
+</body>
+</html>

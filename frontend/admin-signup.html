@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Sign Up - Block-Aid</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0066cc;
+            --secondary: #00b894;
+            --accent: #ff6b6b;
+            --dark-bg: #0a0e14;
+            --card-bg: #151b2a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b8c1;
+            --border: #2d3748;
+            --success: #00b894;
+            --error: #ff6b6b;
+            --warning: #ffa500;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #8b5cf6 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 107, 107, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .signup-container {
+            width: 100%;
+            max-width: 550px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .signup-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 48px 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, #ff6b6b, #8b5cf6);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 8px 16px rgba(255, 107, 107, 0.3);
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .warning-box {
+            background: rgba(255, 165, 0, 0.1);
+            border: 1px solid var(--warning);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 24px;
+            font-size: 12px;
+            color: #ffb347;
+            line-height: 1.5;
+        }
+
+        form {
+            margin-top: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b0b8c1' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 40px;
+        }
+
+        select option {
+            background: var(--card-bg);
+            color: var(--text-primary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .password-strength {
+            font-size: 12px;
+            margin-top: 6px;
+            padding: 8px 12px;
+            background: rgba(255, 165, 0, 0.1);
+            border-radius: 6px;
+            color: var(--text-secondary);
+        }
+
+        .password-strength.strong {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--success);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 18px;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #ff6b6b;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            text-transform: none;
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .terms-link {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .terms-link:hover {
+            text-decoration: underline;
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 4px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #ff6b6b, #8b5cf6);
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .signup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(255, 107, 107, 0.4);
+        }
+
+        .signup-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-section {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .login-section a {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .login-section a:hover {
+            color: #8b5cf6;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            color: var(--success);
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 480px) {
+            .signup-card {
+                padding: 32px 24px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .logo-icon {
+                width: 56px;
+                height: 56px;
+                font-size: 28px;
+            }
+        }
+
+        /* Loading state */
+        .signup-btn.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .signup-btn.loading::after {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            margin-left: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="signup-container">
+        <article class="signup-card">
+            <!-- Back Link -->
+            <a href="index-home.html" class="back-link">
+                ← Back to Home
+            </a>
+
+            <!-- Logo and Header -->
+            <section class="logo-section">
+                <div class="logo-icon">🔐</div>
+                <h1>Admin Registration</h1>
+                <p class="subtitle">Join as a disaster relief administrator</p>
+            </section>
+
+            <!-- Warning Box -->
+            <div class="warning-box">
+                ⚠️ Admin accounts require verification and approval before activation. Your registration will be reviewed by our security team.
+            </div>
+
+            <!-- Signup Form -->
+            <form id="adminSignupForm" novalidate>
+                <!-- Name Fields -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input 
+                            type="text" 
+                            id="firstName" 
+                            name="firstName" 
+                            placeholder="John"
+                            required
+                            aria-label="First name"
+                        >
+                        <div class="error-message" id="firstNameError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input 
+                            type="text" 
+                            id="lastName" 
+                            name="lastName" 
+                            placeholder="Doe"
+                            required
+                            aria-label="Last name"
+                        >
+                        <div class="error-message" id="lastNameError"></div>
+                    </div>
+                </div>
+
+                <!-- Email Input -->
+                <div class="form-group">
+                    <label for="email">Official Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="admin@organization.com"
+                        required
+                        aria-label="Email address"
+                    >
+                    <div class="error-message" id="emailError"></div>
+                </div>
+
+                <!-- Phone Input -->
+                <div class="form-group">
+                    <label for="phone">Contact Number</label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone" 
+                        placeholder="+1 (555) 123-4567"
+                        required
+                        aria-label="Phone number"
+                    >
+                    <div class="error-message" id="phoneError"></div>
+                </div>
+
+                <!-- Organization -->
+                <div class="form-group">
+                    <label for="organization">Organization Name *</label>
+                    <input 
+                        type="text" 
+                        id="organization" 
+                        name="organization" 
+                        placeholder="Your Relief Organization"
+                        required
+                        aria-label="Organization name"
+                    >
+                    <div class="error-message" id="organizationError"></div>
+                </div>
+
+                <!-- Organization Type -->
+                <div class="form-group">
+                    <label for="orgType">Organization Type</label>
+                    <select id="orgType" name="orgType" required>
+                        <option value="">Select organization type...</option>
+                        <option value="ngo">NGO / Non-Profit</option>
+                        <option value="government">Government Agency</option>
+                        <option value="private">Private Relief Organization</option>
+                        <option value="international">International Organization</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <div class="error-message" id="orgTypeError"></div>
+                </div>
+
+                <!-- Password Input -->
+                <div class="form-group">
+                    <label for="password">Create Admin Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Create a strong password"
+                        required
+                        aria-label="Password"
+                    >
+                    <div class="password-strength" id="passwordStrength"></div>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        name="confirmPassword" 
+                        placeholder="Re-enter your password"
+                        required
+                        aria-label="Confirm password"
+                    >
+                    <div class="error-message" id="confirmPasswordError"></div>
+                </div>
+
+                <!-- Terms Checkbox -->
+                <div class="checkbox-group">
+                    <input 
+                        type="checkbox" 
+                        id="terms" 
+                        name="terms"
+                        required
+                        aria-label="Agree to terms and conditions"
+                    >
+                    <label for="terms">I agree to the <a href="#terms" class="terms-link">Terms of Service</a> and <a href="#privacy" class="terms-link">Privacy Policy</a></label>
+                </div>
+
+                <!-- Compliance Checkbox -->
+                <div class="checkbox-group">
+                    <input 
+                        type="checkbox" 
+                        id="compliance" 
+                        name="compliance"
+                        required
+                        aria-label="Agree to compliance requirements"
+                    >
+                    <label for="compliance">I confirm this organization meets international relief standards and compliance requirements</label>
+                </div>
+
+                <!-- Signup Button -->
+                <button type="submit" class="signup-btn" id="signupBtn">Submit for Verification</button>
+                <div class="success-message" id="successMessage">✓ Application submitted successfully!</div>
+            </form>
+
+            <!-- Login Section -->
+            <section class="login-section">
+                Already an admin? <a href="admin-login.html">Sign in here</a>
+            </section>
+        </article>
+    </main>
+
+    <script>
+        const signupForm = document.getElementById('adminSignupForm');
+        const signupBtn = document.getElementById('signupBtn');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+
+        // Form validation
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validatePhone(phone) {
+            const re = /^[\d\s\-\+\(\)]+$/;
+            return re.test(phone) && phone.replace(/\D/g, '').length >= 10;
+        }
+
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            if (password.length >= 10) strength++;
+            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+            if (password.match(/\d/)) strength++;
+            if (password.match(/[^a-zA-Z\d]/)) strength++;
+            return strength;
+        }
+
+        function updatePasswordStrength() {
+            const strength = checkPasswordStrength(passwordInput.value);
+            const strengthEl = document.getElementById('passwordStrength');
+            
+            if (passwordInput.value.length === 0) {
+                strengthEl.textContent = '';
+                return;
+            }
+
+            const levels = [
+                { text: '⚠️ Weak password', class: '' },
+                { text: '⚠️ Fair password', class: '' },
+                { text: '✓ Good password', class: 'strong' },
+                { text: '✓ Strong password (recommended)', class: 'strong' }
+            ];
+
+            const level = levels[strength];
+            strengthEl.textContent = level.text;
+            strengthEl.className = 'password-strength ' + level.class;
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.textContent = '';
+                el.classList.remove('show');
+            });
+        }
+
+        function showError(fieldId, message) {
+            const errorElement = document.getElementById(fieldId + 'Error');
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.classList.add('show');
+            }
+        }
+
+        // Real-time password strength indicator
+        passwordInput.addEventListener('input', updatePasswordStrength);
+
+        // Form submission
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearErrors();
+
+            let isValid = true;
+
+            // Validate first name
+            const firstName = document.getElementById('firstName').value.trim();
+            if (!firstName) {
+                showError('firstName', 'First name is required');
+                isValid = false;
+            } else if (firstName.length < 2) {
+                showError('firstName', 'First name must be at least 2 characters');
+                isValid = false;
+            }
+
+            // Validate last name
+            const lastName = document.getElementById('lastName').value.trim();
+            if (!lastName) {
+                showError('lastName', 'Last name is required');
+                isValid = false;
+            } else if (lastName.length < 2) {
+                showError('lastName', 'Last name must be at least 2 characters');
+                isValid = false;
+            }
+
+            // Validate email
+            const email = document.getElementById('email').value.trim();
+            if (!email) {
+                showError('email', 'Email is required');
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                showError('email', 'Please enter a valid email');
+                isValid = false;
+            }
+
+            // Validate phone
+            const phone = document.getElementById('phone').value.trim();
+            if (!phone) {
+                showError('phone', 'Phone number is required');
+                isValid = false;
+            } else if (!validatePhone(phone)) {
+                showError('phone', 'Please enter a valid phone number');
+                isValid = false;
+            }
+
+            // Validate organization
+            const organization = document.getElementById('organization').value.trim();
+            if (!organization) {
+                showError('organization', 'Organization name is required');
+                isValid = false;
+            }
+
+            // Validate org type
+            const orgType = document.getElementById('orgType').value;
+            if (!orgType) {
+                showError('orgType', 'Please select organization type');
+                isValid = false;
+            }
+
+            // Validate password
+            const password = passwordInput.value;
+            if (!password) {
+                showError('password', 'Password is required');
+                isValid = false;
+            } else if (password.length < 10) {
+                showError('password', 'Admin password must be at least 10 characters');
+                isValid = false;
+            } else if (checkPasswordStrength(password) < 2) {
+                showError('password', 'Password must be stronger (mix of uppercase, lowercase, numbers)');
+                isValid = false;
+            }
+
+            // Validate confirm password
+            if (!confirmPasswordInput.value) {
+                showError('confirmPassword', 'Please confirm your password');
+                isValid = false;
+            } else if (password !== confirmPasswordInput.value) {
+                showError('confirmPassword', 'Passwords do not match');
+                isValid = false;
+            }
+
+            // Validate terms
+            if (!document.getElementById('terms').checked) {
+                alert('Please accept the Terms of Service');
+                isValid = false;
+            }
+
+            // Validate compliance
+            if (!document.getElementById('compliance').checked) {
+                alert('Please confirm compliance with relief standards');
+                isValid = false;
+            }
+
+            if (isValid) {
+                // Simulate signup
+                signupBtn.classList.add('loading');
+                signupBtn.disabled = true;
+
+                // Simulate API call
+                setTimeout(() => {
+                    const successMessage = document.getElementById('successMessage');
+                    successMessage.classList.add('show');
+
+                    // Log form data (in production, send to backend)
+                    console.log({
+                        firstName,
+                        lastName,
+                        email,
+                        phone,
+                        organization,
+                        orgType,
+                        timestamp: new Date().toISOString()
+                    });
+
+                    // Simulate redirect after 2 seconds
+                    setTimeout(() => {
+                        alert(`✓ Admin application submitted!\n\nEmail: ${email}\nOrganization: ${organization}\n\nYou will receive verification email shortly.`);
+                        window.location.href = 'admin-login.html';
+                    }, 1500);
+                }, 1200);
+            }
+        });
+
+        // Real-time validation on blur
+        document.getElementById('email').addEventListener('blur', function() {
+            if (this.value && !validateEmail(this.value)) {
+                showError('email', 'Invalid email format');
+            } else {
+                document.getElementById('emailError').classList.remove('show');
+            }
+        });
+
+        document.getElementById('phone').addEventListener('blur', function() {
+            if (this.value && !validatePhone(this.value)) {
+                showError('phone', 'Invalid phone format');
+            } else {
+                document.getElementById('phoneError').classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
