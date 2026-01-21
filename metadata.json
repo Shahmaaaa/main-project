@@ -1,0 +1,9 @@
+
+{
+  "name": "Block-Aid: Decentralized Disaster Relief",
+  "description": "An AI-verified decentralized disaster relief system that uses Gemini to analyze damage severity and blockchain concepts for transparent fund allocation.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}
