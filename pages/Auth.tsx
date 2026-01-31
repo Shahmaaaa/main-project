@@ -19,22 +19,30 @@ const Auth: React.FC<AuthProps> = ({ onLogin, initialRole = 'User' }) => {
   });
 
   useEffect(() => {
-    if (initialRole === 'Admin') {
-      setFormData(prev => ({ 
-        ...prev, 
-        role: 'Admin', 
-        email: 'admin@blockaid.gov', 
-        password: 'admin' 
-      }));
-    } else {
-      setFormData(prev => ({ 
-        ...prev, 
-        role: 'User', 
-        email: 'shahma@example.com', 
-        password: 'password' 
-      }));
-    }
-  }, [initialRole]);
+  if (initialRole === 'Admin') {
+    setFormData(prev => ({
+      ...prev,
+      role: 'Admin',
+      email: 'admin@blockaid.gov',
+      password: 'admin',
+    }));
+  } else if (initialRole === 'Donor') {
+    setFormData(prev => ({
+      ...prev,
+      role: 'Donor',
+      email: 'donor@blockaid.org',
+      password: 'donor',
+    }));
+  } else {
+    setFormData(prev => ({
+      ...prev,
+      role: 'User',
+      email: 'shahma@example.com',
+      password: 'password',
+    }));
+  }
+}, [initialRole]);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,11 +54,12 @@ const Auth: React.FC<AuthProps> = ({ onLogin, initialRole = 'User' }) => {
         authenticatedUser = await db.auth.login(formData.email, formData.password);
       } else {
         const newUser: User = {
-          id: `usr_${Math.random().toString(36).substr(2, 9)}`,
-          name: formData.name,
-          email: formData.email,
-          role: formData.role
-        };
+  id: `usr_${Math.random().toString(36).substr(2, 9)}`,
+  name: formData.name || 'Donor',
+  email: formData.email,
+  role: formData.role
+};
+
         authenticatedUser = await db.users.create({ ...newUser, password: formData.password });
       }
       
@@ -96,8 +105,13 @@ const Auth: React.FC<AuthProps> = ({ onLogin, initialRole = 'User' }) => {
         <div className="bg-blue-500/5 border border-blue-500/10 p-4 rounded-xl">
            <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Demo Credentials</p>
            <p className="text-xs text-slate-500">
-             {formData.role === 'Admin' ? 'admin@blockaid.gov / admin' : 'shahma@example.com / password'}
-           </p>
+  {formData.role === 'Admin'
+    ? 'admin@blockaid.gov / admin'
+    : formData.role === 'Donor'
+    ? 'donor@blockaid.org / donor'
+    : 'shahma@example.com / password'}
+</p>
+
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -143,33 +157,56 @@ const Auth: React.FC<AuthProps> = ({ onLogin, initialRole = 'User' }) => {
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Access Role</label>
               <div className="flex p-1 bg-[#0b0f1a] rounded-xl border border-white/5">
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, role: 'User' })}
-                  className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition ${
-                    formData.role === 'User' ? 'bg-[#1f2937] text-teal-400 shadow-sm' : 'text-slate-500'
-                  }`}
-                >
-                  Citizen
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, role: 'Admin' })}
-                  className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition ${
-                    formData.role === 'Admin' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-500'
-                  }`}
-                >
-                  Authority
-                </button>
-              </div>
+  <button
+    type="button"
+    onClick={() => setFormData({ ...formData, role: 'User' })}
+    className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition ${
+      formData.role === 'User'
+        ? 'bg-[#1f2937] text-teal-400 shadow-sm'
+        : 'text-slate-500'
+    }`}
+  >
+    User
+  </button>
+
+  <button
+    type="button"
+    onClick={() => setFormData({ ...formData, role: 'Admin' })}
+    className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition ${
+      formData.role === 'Admin'
+        ? 'bg-blue-600 text-white shadow-sm'
+        : 'text-slate-500'
+    }`}
+  >
+    Admin
+  </button>
+
+  <button
+    type="button"
+    onClick={() => setFormData({ ...formData, role: 'Donor' })}
+    className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition ${
+      formData.role === 'Donor'
+        ? 'bg-amber-500 text-white shadow-sm'
+        : 'text-slate-500'
+    }`}
+  >
+    Donor
+  </button>
+</div>
+
             </div>
           )}
 
           <button
             type="submit"
             className={`w-full py-4 rounded-xl font-bold text-white shadow-2xl transition-all flex items-center justify-center gap-2 transform active:scale-[0.98] ${
-              formData.role === 'Admin' && !isLogin ? 'bg-blue-600' : 'bg-gradient-to-r from-blue-600 to-teal-500 shadow-blue-500/20'
-            }`}
+  formData.role === 'Admin'
+    ? 'bg-blue-600'
+    : formData.role === 'Donor'
+    ? 'bg-amber-500'
+    : 'bg-gradient-to-r from-blue-600 to-teal-500 shadow-blue-500/20'
+}`}
+
           >
             {isLogin ? 'Enter Dashboard' : 'Finalize Account'}
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

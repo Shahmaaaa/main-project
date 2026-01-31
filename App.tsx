@@ -11,6 +11,7 @@ import MyReports from './pages/MyReports';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminReview from './pages/AdminReview';
 import AIAnalyzer from './pages/AIAnalyzer';
+import DonorDashboard from './pages/DonorDashboard'; // ✅ ADDED
 
 // Shared Components
 import Sidebar from './components/Sidebar';
@@ -24,9 +25,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const init = async () => {
       const session = db.auth.getSession();
-      if (session) {
-        setUser(session);
-      }
+      if (session) setUser(session);
 
       try {
         const allReports = await db.reports.all();
@@ -37,7 +36,6 @@ const App: React.FC = () => {
 
       setLoading(false);
     };
-
     init();
   }, []);
 
@@ -74,53 +72,56 @@ const App: React.FC = () => {
     );
   }
 
-  // Not logged in → Landing
+  // 🔒 Not logged in
   if (!user) {
     return <Landing onLogin={handleLogin} />;
   }
 
   const renderRoutes = () => {
-    if (user.role === 'User') {
-      return (
-        <Routes>
-          <Route
-            path="/"
-            element={<UserDashboard user={user} reports={reports} />}
-          />
-          <Route
-            path="/report"
-            element={<ReportDisaster user={user} onAddReport={handleAddReport} />}
-          />
-
-          {/* ✅ AI ANALYSIS ROUTE */}
-          <Route path="/ai-analysis" element={<AIAnalyzer />} />
-
-          <Route
-            path="/my-reports"
-            element={<MyReports user={user} reports={reports} />}
-          />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      );
-    }
-
-    // Admin Routes
+  if (user.role === 'User') {
     return (
       <Routes>
-        <Route path="/" element={<AdminDashboard reports={reports} />} />
+        <Route path="/" element={<UserDashboard user={user} reports={reports} />} />
         <Route
-          path="/review/:id"
-          element={
-            <AdminReview
-              reports={reports}
-              onUpdate={handleUpdateReport}
-            />
-          }
+          path="/report"
+          element={<ReportDisaster user={user} onAddReport={handleAddReport} />}
+        />
+        <Route path="/ai-analysis" element={<AIAnalyzer />} />
+        <Route
+          path="/my-reports"
+          element={<MyReports user={user} reports={reports} />}
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     );
-  };
+  }
+
+  if (user.role === 'Donor') {
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={<DonorDashboard reports={reports} />}
+      />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+
+
+  // Admin Routes (UNCHANGED)
+  return (
+    <Routes>
+      <Route path="/" element={<AdminDashboard reports={reports} />} />
+      <Route
+        path="/review/:id"
+        element={<AdminReview reports={reports} onUpdate={handleUpdateReport} />}
+      />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+};
 
   return (
     <Router>

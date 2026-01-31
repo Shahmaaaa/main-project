@@ -3,7 +3,8 @@ export type DisasterType = 'Flood' | 'Cyclone' | 'Earthquake' | 'Landslide';
 export type Severity = 'Low' | 'Medium' | 'High';
 export type ReportStatus = 'Pending' | 'Approved' | 'Rejected' | 'Under Review';
 export type FundStatus = 'Pending' | 'Approved' | 'Released';
-export type UserRole = 'User' | 'Admin';
+export type UserRole = 'User' | 'Admin' | 'Donor';
+
 
 export interface DisasterReport {
   id: string;

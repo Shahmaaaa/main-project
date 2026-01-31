@@ -53,8 +53,28 @@ const Sidebar: React.FC<SidebarProps> = ({ role, onLogout }) => {
       )
     },
   ];
+  // Donor Links (✅ NEW)
+const donorLinks = [
+  {
+    to: '/',
+    label: 'Donate',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+          d="M12 8c-1.657 0-3 1.343-3 3m0 0c0 1.657 1.343 3 3 3m0-6c1.657 0 3 1.343 3 3m-3-6V4m0 16v-4m8-4h-4m-8 0H4" />
+      </svg>
+    )
+  }
+];
 
-  const links = role === 'User' ? userLinks : adminLinks;
+
+  const links =
+  role === 'User'
+    ? userLinks
+    : role === 'Admin'
+    ? adminLinks
+    : donorLinks;
+
   const themeClass = role === 'Admin' ? 'hover:bg-indigo-500/10 hover:text-indigo-400' : 'hover:bg-teal-500/10 hover:text-teal-400';
   const activeClass = role === 'Admin' ? 'bg-indigo-600 text-white shadow-indigo-900/40' : 'bg-teal-600 text-white shadow-teal-900/40';
 

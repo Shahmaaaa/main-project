@@ -9,9 +9,10 @@ interface LandingProps {
 
 const Landing: React.FC<LandingProps> = ({ onLogin }) => {
   const [showAuth, setShowAuth] = useState(false);
-  const [authRole, setAuthRole] = useState<'User' | 'Admin'>('User');
+  const [authRole, setAuthRole] = useState<'User' | 'Admin' | 'Donor'>('User');
 
-  const triggerAuth = (role: 'User' | 'Admin') => {
+const triggerAuth = (role: 'User' | 'Admin' | 'Donor') => {
+
     setAuthRole(role);
     setShowAuth(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -56,19 +57,42 @@ const Landing: React.FC<LandingProps> = ({ onLogin }) => {
           </div>
 
           <div className="flex items-center gap-3">
-            <button 
-              onClick={() => triggerAuth('User')}
-              className="px-5 py-2 text-sm font-bold border border-blue-600/30 rounded-lg hover:bg-blue-600/10 transition"
-            >
-              User Login
-            </button>
-            <button 
-              onClick={() => triggerAuth('Admin')}
-              className="px-5 py-2 text-sm font-bold bg-gradient-to-r from-blue-600 to-teal-500 rounded-lg hover:opacity-90 transition shadow-lg shadow-blue-600/20"
-            >
-              Admin
-            </button>
-          </div>
+  {/* USER */}
+  <button
+    onClick={() => triggerAuth('User')}
+    className="px-5 py-2 text-sm font-bold 
+      bg-blue-600/10 text-blue-400 
+      border border-blue-500/30 
+      rounded-lg 
+      hover:bg-blue-600/20 transition"
+  >
+    User
+  </button>
+
+  {/* ADMIN */}
+  <button
+    onClick={() => triggerAuth('Admin')}
+    className="px-5 py-2 text-sm font-bold 
+      bg-teal-600 text-white 
+      rounded-lg 
+      hover:bg-teal-700 transition"
+  >
+    Admin
+  </button>
+
+  {/* DONOR */}
+  <button
+    onClick={() => triggerAuth('Donor')}
+    className="px-5 py-2 text-sm font-bold 
+      bg-amber-600 text-white 
+      rounded-lg 
+      shadow-lg shadow-amber-500/30 
+      hover:bg-amber-700 transition"
+  >
+    Donor
+  </button>
+</div>
+
         </div>
       </nav>
 
