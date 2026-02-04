@@ -11,9 +11,9 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ role, onLogout }) => {
   // Citizen Links
   const userLinks = [
-    { 
-      to: '/', 
-      label: 'Home Dashboard', 
+    {
+      to: '/',
+      label: 'Home Dashboard',
       icon: (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a11 11 0 0011-11H5z" />
@@ -21,18 +21,18 @@ const Sidebar: React.FC<SidebarProps> = ({ role, onLogout }) => {
         </svg>
       )
     },
-    { 
-      to: '/report', 
-      label: 'Report Disaster', 
+    {
+      to: '/report',
+      label: 'Report Disaster',
       icon: (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       )
     },
-    { 
-      to: '/my-reports', 
-      label: 'My Submissions', 
+    {
+      to: '/my-reports',
+      label: 'My Submissions',
       icon: (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
@@ -43,37 +43,78 @@ const Sidebar: React.FC<SidebarProps> = ({ role, onLogout }) => {
 
   // Admin/Authority Links
   const adminLinks = [
-    { 
-      to: '/', 
-      label: 'Admin Control', 
+    {
+      to: '/',
+      label: 'Admin Control',
       icon: (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+      )
+    },
+
+    {
+      to: '/verified',
+      label: 'Verified Reports',
+      icon: (
+        <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+            d="M5 13l4 4L19 7" />
+        </svg>
+      )
+    },
+
+    {
+      to: '/rejected',
+      label: 'Rejected Reports',
+      icon: (
+        <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+            d="M6 18L18 6M6 6l12 12" />
         </svg>
       )
     },
   ];
+
   // Donor Links (✅ NEW)
-const donorLinks = [
-  {
-    to: '/',
-    label: 'Donate',
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-          d="M12 8c-1.657 0-3 1.343-3 3m0 0c0 1.657 1.343 3 3 3m0-6c1.657 0 3 1.343 3 3m-3-6V4m0 16v-4m8-4h-4m-8 0H4" />
-      </svg>
-    )
-  }
-];
+  const donorLinks = [
+    {
+      to: '/',
+      label: 'Global Missions',
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        </svg>
+      )
+    },
+    {
+      to: '/my-giving',
+      label: 'My Giving',
+      icon: (
+        <svg className="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 1.343-3 3m0 0c0 1.657 1.343 3 3 3m0-6c1.657 0 3 1.343 3 3m-3-6V4m0 16v-4m8-4h-4m-8 0H4" />
+        </svg>
+      )
+    },
+    {
+      to: '/impact-journey',
+      label: 'Impact Journey',
+      icon: (
+        <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+      )
+    },
+  ];
 
 
   const links =
-  role === 'User'
-    ? userLinks
-    : role === 'Admin'
-    ? adminLinks
-    : donorLinks;
+    role === 'User'
+      ? userLinks
+      : role === 'Admin'
+        ? adminLinks
+        : donorLinks;
 
   const themeClass = role === 'Admin' ? 'hover:bg-indigo-500/10 hover:text-indigo-400' : 'hover:bg-teal-500/10 hover:text-teal-400';
   const activeClass = role === 'Admin' ? 'bg-indigo-600 text-white shadow-indigo-900/40' : 'bg-teal-600 text-white shadow-teal-900/40';
@@ -102,10 +143,9 @@ const donorLinks = [
             key={link.to}
             to={link.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-300 group ${
-                isActive
-                  ? `${activeClass} shadow-lg scale-[1.02]`
-                  : `text-slate-400 font-medium ${themeClass}`
+              `flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-300 group ${isActive
+                ? `${activeClass} shadow-lg scale-[1.02]`
+                : `text-slate-400 font-medium ${themeClass}`
               }`
             }
           >
@@ -119,11 +159,11 @@ const donorLinks = [
 
       <div className="p-4 border-t border-slate-800 space-y-4">
         <div className="px-4 py-3 rounded-2xl bg-slate-800/50 border border-slate-700/50">
-           <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">Network Status</p>
-           <div className="flex items-center gap-2">
-             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-             <span className="text-xs text-slate-300 font-medium">Mainnet Online</span>
-           </div>
+          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">Network Status</p>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-xs text-slate-300 font-medium">Mainnet Online</span>
+          </div>
         </div>
 
         <button
