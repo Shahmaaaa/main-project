@@ -3,12 +3,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { DisasterReport } from '../types';
 import { SeverityBadge, StatusBadge } from './Dashboard';
+import { DisasterMap } from '../components/DisasterMap';
 
 interface AdminDashboardProps {
   reports: DisasterReport[];
+  onDelete: (id: string) => void;
 }
 
-const AdminDashboard: React.FC<AdminDashboardProps> = ({ reports }) => {
+const AdminDashboard: React.FC<AdminDashboardProps> = ({ reports, onDelete }) => {
   const pending = reports.filter(r => r.status === 'Pending').length;
   const approved = reports.filter(r => r.status === 'Approved').length;
   const rejected = reports.filter(r => r.status === 'Rejected').length;
@@ -21,6 +23,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ reports }) => {
           <p className="text-slate-500">Verifying disaster evidence and releasing funds via Blockchain.</p>
         </div>
       </div>
+
+      <DisasterMap reports={reports} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
@@ -38,10 +42,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ reports }) => {
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
           <p className="text-slate-400 text-sm font-bold uppercase tracking-widest">Released</p>
           <div className="flex items-center gap-2 mt-2">
-             <span className="text-4xl font-black text-indigo-600">
-               {reports.filter(r => r.fundStatus === 'Released').length}
-             </span>
-             <span className="bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded font-bold">ETH NETWORK</span>
+            <span className="text-4xl font-black text-indigo-600">
+              {reports.filter(r => r.fundStatus === 'Released').length}
+            </span>
+            <span className="bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded font-bold">ETH NETWORK</span>
           </div>
         </div>
       </div>
@@ -78,7 +82,16 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ reports }) => {
                   <td className="px-6 py-4 text-sm text-slate-600">
                     {report.userName}
                   </td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
+                    <button
+                      onClick={() => onDelete(report.id)}
+                      className="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors group"
+                      title="Remove Duplicate/Invalid Report"
+                    >
+                      <svg className="w-5 h-5 opacity-50 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
                     <Link
                       to={`/review/${report.id}`}
                       className="inline-flex items-center gap-1 bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition shadow-sm"
@@ -102,7 +115,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ reports }) => {
           </table>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

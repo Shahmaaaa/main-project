@@ -9,19 +9,95 @@ interface LandingProps {
 
 const Landing: React.FC<LandingProps> = ({ onLogin }) => {
   const [showAuth, setShowAuth] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [authRole, setAuthRole] = useState<'User' | 'Admin' | 'Donor'>('User');
 
-const triggerAuth = (role: 'User' | 'Admin' | 'Donor') => {
-
+  const triggerAuth = (role: 'User' | 'Admin' | 'Donor') => {
     setAuthRole(role);
     setShowAuth(true);
+    setShowAbout(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  if (showAbout) {
+    return (
+      <div className="bg-[#0b0f1a] min-h-screen text-white p-6 md:p-20 relative animate-in fade-in duration-700">
+        <button
+          onClick={() => setShowAbout(false)}
+          className="fixed top-12 right-12 z-50 bg-white/10 hover:bg-white/20 p-4 rounded-full backdrop-blur-xl transition group"
+        >
+          <svg className="w-6 h-6 text-white group-hover:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <div className="max-w-5xl mx-auto space-y-20">
+          <div className="space-y-6">
+            <p className="text-blue-500 font-black uppercase tracking-[0.4em] text-sm italic">The Block-Aid Manifesto</p>
+            <h1 className="text-6xl md:text-8xl font-black tracking-tighter">
+              Reinventing <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-400">Survival.</span>
+            </h1>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="bg-white/5 p-10 rounded-[40px] border border-white/10 backdrop-blur-md">
+              <h3 className="text-2xl font-black mb-4">The Challenge</h3>
+              <p className="text-slate-400 leading-relaxed font-medium">
+                Traditional disaster relief is crippled by bureaucracy. Aid takes weeks to reach the field, and billions are lost to mismanagement. In a catastrophe, seconds cost lives.
+              </p>
+            </div>
+            <div className="bg-indigo-600/20 p-10 rounded-[40px] border border-indigo-500/30 backdrop-blur-md">
+              <h3 className="text-2xl font-black text-blue-400 mb-4">The Innovation</h3>
+              <p className="text-slate-200 leading-relaxed font-medium">
+                Block-Aid merges the **EfficientB0 Deep Learning model** and **Gemini AI Visual Forensics** with the **Ethereum Blockchain**. Our neural network classifies damage into Low, Medium, and High severity for instant verification.
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-12">
+            <h2 className="text-3xl font-black italic">The Architecture</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="space-y-4">
+                <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-2xl">🤖</div>
+                <h4 className="font-black text-xl">EfficientB0 Audit Layer</h4>
+                <p className="text-slate-500 text-sm">
+                  Utilizing the EfficientB0 architecture to autonomously categorize disaster damage (Low/Medium/High) with precision, coupled with Gemini's fraud detection capabilities.
+                </p>
+              </div>
+              <div className="space-y-4">
+                <div className="w-12 h-12 bg-teal-500 rounded-2xl flex items-center justify-center text-2xl">⚡</div>
+                <h4 className="font-black text-xl">Rapid Approval</h4>
+                <p className="text-slate-500 text-sm">
+                  Authorized Admins sign off on verified reports via multi-signature hooks, triggering automated smart contract execution.
+                </p>
+              </div>
+              <div className="space-y-4">
+                <div className="w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center text-2xl">💰</div>
+                <h4 className="font-black text-xl">Direct ETH Payouts</h4>
+                <p className="text-slate-500 text-sm">
+                  Funds move directly from donor-funded pools to verified victim wallets. Total transparency, zero leakages.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-20 border-t border-white/5">
+            <button
+              onClick={() => setShowAbout(false)}
+              className="px-12 py-5 bg-white text-slate-900 rounded-3xl font-black text-xl hover:scale-105 transition active:scale-95 shadow-2xl shadow-white/10"
+            >
+              Enter the Ecosystem
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (showAuth) {
     return (
       <div className="relative">
-        <button 
+        <button
           onClick={() => setShowAuth(false)}
           className="fixed top-6 left-6 z-50 text-slate-400 hover:text-white flex items-center gap-2 font-bold transition"
         >
@@ -48,50 +124,55 @@ const triggerAuth = (role: 'User' | 'Admin' | 'Donor') => {
             </div>
             <span className="text-xl font-black tracking-tight">Block-Aid</span>
           </div>
-          
+
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
             <a href="#how-it-works" className="hover:text-white transition">How It Works</a>
             <a href="#features" className="hover:text-white transition">Features</a>
             <a href="#impact" className="hover:text-white transition">Impact</a>
-            <a href="#about" className="hover:text-white transition">About</a>
+            <button
+              onClick={() => setShowAbout(true)}
+              className="hover:text-white transition"
+            >
+              About
+            </button>
           </div>
 
           <div className="flex items-center gap-3">
-  {/* USER */}
-  <button
-    onClick={() => triggerAuth('User')}
-    className="px-5 py-2 text-sm font-bold 
+            {/* USER */}
+            <button
+              onClick={() => triggerAuth('User')}
+              className="px-5 py-2 text-sm font-bold 
       bg-blue-600/10 text-blue-400 
       border border-blue-500/30 
       rounded-lg 
       hover:bg-blue-600/20 transition"
-  >
-    User
-  </button>
+            >
+              User
+            </button>
 
-  {/* ADMIN */}
-  <button
-    onClick={() => triggerAuth('Admin')}
-    className="px-5 py-2 text-sm font-bold 
+            {/* ADMIN */}
+            <button
+              onClick={() => triggerAuth('Admin')}
+              className="px-5 py-2 text-sm font-bold 
       bg-teal-600 text-white 
       rounded-lg 
       hover:bg-teal-700 transition"
-  >
-    Admin
-  </button>
+            >
+              Admin
+            </button>
 
-  {/* DONOR */}
-  <button
-    onClick={() => triggerAuth('Donor')}
-    className="px-5 py-2 text-sm font-bold 
+            {/* DONOR */}
+            <button
+              onClick={() => triggerAuth('Donor')}
+              className="px-5 py-2 text-sm font-bold 
       bg-amber-600 text-white 
       rounded-lg 
       shadow-lg shadow-amber-500/30 
       hover:bg-amber-700 transition"
-  >
-    Donor
-  </button>
-</div>
+            >
+              Donor
+            </button>
+          </div>
 
         </div>
       </nav>
@@ -108,13 +189,16 @@ const triggerAuth = (role: 'User' | 'Admin' | 'Donor') => {
             Leveraging artificial intelligence and blockchain technology to create transparent, efficient disaster relief management systems that save lives and rebuild communities.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button 
+            <button
               onClick={() => triggerAuth('User')}
               className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-teal-500 rounded-xl font-black text-lg shadow-xl shadow-blue-600/25 transform hover:scale-105 transition active:scale-95"
             >
               Report Disaster
             </button>
-            <button className="w-full sm:w-auto px-8 py-4 border border-slate-700 rounded-xl font-black text-lg hover:bg-white/5 transition">
+            <button
+              onClick={() => setShowAbout(true)}
+              className="w-full sm:w-auto px-8 py-4 border border-slate-700 rounded-xl font-black text-lg hover:bg-white/5 transition"
+            >
               Learn More
             </button>
           </div>
@@ -143,35 +227,35 @@ const triggerAuth = (role: 'User' | 'Admin' | 'Donor') => {
             Powerful <span className="text-teal-400">Features</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <FeatureCard 
-              icon="🤖" 
-              title="AI Severity Prediction" 
-              desc="Machine learning models predict disaster severity and resource requirements with 95%+ accuracy." 
+            <FeatureCard
+              icon="🤖"
+              title="AI Severity Prediction"
+              desc="Machine learning models predict disaster severity and resource requirements with 95%+ accuracy."
             />
-            <FeatureCard 
-              icon="🔗" 
-              title="Blockchain Verification" 
-              desc="Every transaction is verified and immutable, ensuring complete transparency in relief distribution." 
+            <FeatureCard
+              icon="🔗"
+              title="Blockchain Verification"
+              desc="Every transaction is verified and immutable, ensuring complete transparency in relief distribution."
             />
-            <FeatureCard 
-              icon="📊" 
-              title="Real-Time Monitoring" 
-              desc="Live dashboards show disaster progression, resource allocation, and impact metrics." 
+            <FeatureCard
+              icon="📊"
+              title="Real-Time Monitoring"
+              desc="Live dashboards show disaster progression, resource allocation, and impact metrics."
             />
-            <FeatureCard 
-              icon="💰" 
-              title="Smart Contracts" 
-              desc="Automated fund distribution reduces overhead and ensures resources reach those in need faster." 
+            <FeatureCard
+              icon="💰"
+              title="Smart Contracts"
+              desc="Automated fund distribution reduces overhead and ensures resources reach those in need faster."
             />
-            <FeatureCard 
-              icon="🌍" 
-              title="Global Coverage" 
-              desc="Support for multiple disaster types across different geographical regions worldwide." 
+            <FeatureCard
+              icon="🌍"
+              title="Global Coverage"
+              desc="Support for multiple disaster types across different geographical regions worldwide."
             />
-            <FeatureCard 
-              icon="🔒" 
-              title="Enterprise Security" 
-              desc="Military-grade encryption and multi-signature authentication for sensitive operations." 
+            <FeatureCard
+              icon="🔒"
+              title="Enterprise Security"
+              desc="Military-grade encryption and multi-signature authentication for sensitive operations."
             />
           </div>
         </div>
@@ -199,7 +283,10 @@ const triggerAuth = (role: 'User' | 'Admin' | 'Donor') => {
               <button onClick={() => triggerAuth('User')} className="w-full sm:w-auto px-10 py-4 bg-white text-blue-600 rounded-xl font-black text-lg hover:bg-slate-50 transition shadow-xl">
                 Report Disaster
               </button>
-              <button className="w-full sm:w-auto px-10 py-4 border-2 border-white/30 rounded-xl font-black text-lg hover:bg-white/10 transition">
+              <button
+                onClick={() => setShowAbout(true)}
+                className="w-full sm:w-auto px-10 py-4 border-2 border-white/30 rounded-xl font-black text-lg hover:bg-white/10 transition"
+              >
                 Get Started
               </button>
             </div>
