@@ -52,12 +52,12 @@ async function request<T>(path: string, options?: RequestInit, fallbackAction?: 
       ...options,
       headers: { 'Content-Type': 'application/json', ...options?.headers },
     });
-    
+
     if (!res.ok) {
       const errorMsg = await res.text();
       throw new Error(errorMsg || 'API Request failed');
     }
-    
+
     return await res.json();
   } catch (error) {
     console.warn(`Backend unreachable at ${path}. Using fallback storage.`, error);
@@ -111,6 +111,15 @@ export const db = {
           reports[idx] = { ...reports[idx], ...updates };
           setStorage('mock_reports', reports);
         }
+      });
+    },
+    delete: async (id: string): Promise<void> => {
+      return request<void>(`/reports/${id}`, {
+        method: 'DELETE'
+      }, () => {
+        const reports = getStorage('mock_reports');
+        const updated = reports.filter((r: any) => r.id !== id);
+        setStorage('mock_reports', updated);
       });
     },
     byUserId: async (userId: string): Promise<DisasterReport[]> => {
