@@ -26,6 +26,17 @@ export interface DisasterReport {
   blockchainHash?: string;
   timestamp: string;
   details: Record<string, any>;
+  evidenceUrls?: {
+    news?: string;
+    video?: string;
+    other?: string;
+  };
+  recoveryUpdates?: {
+    date: string;
+    message: string;
+    images: string[];
+  }[];
+  userWallet?: string;
   userId: string;
   userName: string;
 }
@@ -35,4 +46,13 @@ export interface User {
   name: string;
   email: string;
   role: UserRole;
+}
+
+export interface Donation {
+  id: string;
+  reportId: string;
+  amount: number;
+  date: string;
+  blockchainHash?: string;
+  donorId: string;
 }
