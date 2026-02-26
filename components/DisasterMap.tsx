@@ -48,8 +48,10 @@ export const DisasterMap: React.FC<DisasterMapProps> = ({ reports }) => {
 
                 {/* Abstract "Map" Nodes */}
                 <div className="relative w-full h-[280px]">
-                    {reports.map((report) => {
-                        const { x, y } = getCoords(report.location.area + report.location.district);
+                    {reports?.map((report) => {
+                        const area = report.location?.area || 'Unknown';
+                        const district = report.location?.district || 'Unknown';
+                        const { x, y } = getCoords(area + district);
                         const isHigh = (report.severityFinal || report.severityAI) === 'High';
 
                         return (
@@ -67,11 +69,11 @@ export const DisasterMap: React.FC<DisasterMapProps> = ({ reports }) => {
 
                                 {/* Label Tooltip */}
                                 <div className="absolute left-6 top-1/2 -translate-y-1/2 bg-slate-800 text-white px-3 py-1.5 rounded-xl border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 shadow-2xl">
-                                    <p className="text-[10px] font-black uppercase text-blue-400">{report.type}</p>
-                                    <p className="text-xs font-bold leading-none">{report.location.area}</p>
+                                    <p className="text-[10px] font-black uppercase text-blue-400">{report.type || 'Incident'}</p>
+                                    <p className="text-xs font-bold leading-none">{area}</p>
                                     <div className="mt-1 flex items-center gap-1">
                                         <span className={`w-1.5 h-1.5 rounded-full ${report.status === 'Approved' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-                                        <span className="text-[8px] text-slate-400 font-bold uppercase">{report.status}</span>
+                                        <span className="text-[8px] text-slate-400 font-bold uppercase">{report.status || 'Pending'}</span>
                                     </div>
                                 </div>
                             </div>

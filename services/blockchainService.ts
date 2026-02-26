@@ -10,51 +10,62 @@ const CONTRACT_ABI = [
     "event ReportApproved(string id, string severity, uint256 amount, address approver)"
 ];
 
-// Address will be updated dynamically from the backend or env
 let contractAddress = "";
+
+async function ensureContractAddress() {
+    if (contractAddress) return contractAddress;
+    try {
+        const configRes = await fetch("http://localhost:5000/api/blockchain/config");
+        if (configRes.ok) {
+            const config = await configRes.json();
+            contractAddress = config.address;
+            console.log("[Blockchain] Contract address loaded:", contractAddress);
+        } else {
+            console.error("[Blockchain] Config request failed with status:", configRes.status);
+        }
+    } catch (e) {
+        console.warn("[Blockchain] Could not fetch contract address from backend. Ensure backend is running.");
+    }
+    return contractAddress;
+}
 
 export const blockchainService = {
     async connectWallet() {
         if (!window.ethereum) {
-            throw new Error("MetaMask is not installed");
+            throw new Error("MetaMask is not installed. Please install it to continue.");
         }
-        const provider = new ethers.BrowserProvider(window.ethereum);
+        // In ethers v6, we can pass "any" to allow any network or let it auto-detect.
+        // For local dev (Ganache), auto-detect is usually fine.
+        const provider = new ethers.BrowserProvider(window.ethereum, "any");
         const accounts = await provider.send("eth_requestAccounts", []);
-        return { provider, signer: await provider.getSigner(), account: accounts[0] };
+        const signer = await provider.getSigner();
+        return { provider, signer, account: accounts[0] };
     },
 
     async getContract(signer?: ethers.Signer) {
-        if (!contractAddress) {
-            // Fetch address from backend if not set
-            try {
-                const res = await fetch("http://localhost:5000/api/reports");
-                const reports = await res.json();
-                // Find a report with a blockchainHash or fetch specialized config endpoint
-                // For now, we'll assume the user might need to set it or we fetch it from a new endpoint
-                const configRes = await fetch("http://localhost:5000/api/blockchain/config");
-                if (configRes.ok) {
-                    const config = await configRes.json();
-                    contractAddress = config.address;
-                }
-            } catch (e) {
-                console.warn("Could not fetch contract address from backend");
-            }
+        const addr = await ensureContractAddress();
+        if (!addr) {
+            throw new Error("Blockchain contract address not found. Please ensure the contract is deployed and the backend is running.");
         }
 
-        if (!contractAddress) throw new Error("Contract address not found. Deploy first.");
-
-        const provider = new ethers.BrowserProvider(window.ethereum!);
-        return new ethers.Contract(contractAddress, CONTRACT_ABI, signer || provider);
+        const provider = new ethers.BrowserProvider(window.ethereum!, "any");
+        return new ethers.Contract(addr, CONTRACT_ABI, signer || provider);
     },
 
     async donate(amountEth: string) {
+        const addr = await ensureContractAddress();
+        if (!addr) {
+            throw new Error("Cannot donate: Disaster Relief Contract address is missing. Please ensure the backend is running and the contract is deployed.");
+        }
+
         const { signer } = await this.connectWallet();
-        // In a real app, you'd send this to the contract or a specific pool
-        // For this project, we can send to the contract address
+
+        console.log(`[Blockchain] Sending ${amountEth} ETH to ${addr}`);
         const tx = await signer.sendTransaction({
-            to: contractAddress,
+            to: addr,
             value: ethers.parseEther(amountEth)
         });
+
         return tx.hash;
     }
 };

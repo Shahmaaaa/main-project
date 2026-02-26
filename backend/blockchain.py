@@ -1,9 +1,14 @@
 import os
 import json
 from web3 import Web3
+from dotenv import load_dotenv
+
+# Load environment variables
+basedir = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(basedir, "../.env"))
 
 # Connect to Ganache
-GANACHE_URL = "http://127.0.0.1:7545"
+GANACHE_URL = os.getenv("RPC_URL", "http://127.0.0.1:8545")
 w3 = Web3(Web3.HTTPProvider(GANACHE_URL))
 
 contract = None
@@ -12,47 +17,72 @@ admin_account = None
 def load_contract():
     global contract, admin_account
     
-    if not w3.is_connected():
-        print("[ERROR] Failed to connect to Blockchain at", GANACHE_URL)
-        return None
+    is_connected = w3.is_connected()
+    if not is_connected:
+        print(f"[WARN] Could not connect to Blockchain at {GANACHE_URL}. Check if Ganache is running.")
 
-    # Load Truffle Artifact
-    # Assumes backend/ is current dir, so build/ is at ../build
-    # Adjust path if running from root
-    basedir = os.path.dirname(os.path.abspath(__file__))
+    # 1. TRY LOADING FROM ENV FIRST (MOST RELIABLE)
+    env_address = os.getenv("CONTRACT_ADDRESS")
+    
+    # Load Truffle Artifact for ABI
     artifact_path = os.path.join(basedir, "..", "build", "contracts", "BlockAid.json")
     
     if not os.path.exists(artifact_path):
-        print(f"[WARN] Contract artifact not found at {artifact_path}. Run 'truffle migrate' first.")
+        print(f"[ERROR] Contract artifact not found at {artifact_path}.")
         return None
 
-    with open(artifact_path) as f:
-        artifact = json.load(f)
+    try:
+        with open(artifact_path) as f:
+            artifact = json.load(f)
 
-    # Get Network ID
-    network_id = str(w3.eth.chain_id)
-    # Ganache default often 5777, but w3.eth.chain_id should match
-    # Truffle stores networks by ID.
-    
-    if network_id not in artifact["networks"]:
-        # Try to find any network if specific one not found (dev env)
-        if artifact["networks"]:
-            network_id = list(artifact["networks"].keys())[-1]
+        abi = artifact["abi"]
+        address = None
+
+        if env_address and len(env_address) > 20:
+            address = env_address
+            print(f"[INFO] Using contract address from .env: {address}")
         else:
-            print("[WARN] Contract not deployed on current network.")
+            # Fallback to Truffle Artifact
+            network_id = str(w3.eth.chain_id) if is_connected else None
+            if network_id and network_id in artifact.get("networks", {}):
+                address = artifact["networks"][network_id]["address"]
+            elif artifact.get("networks"):
+                # Use the last deployed network
+                last_network = list(artifact["networks"].keys())[-1]
+                address = artifact["networks"][last_network]["address"]
+            
+        if not address:
+            print("[ERROR] No contract address found in .env or artifacts.")
             return None
 
-    address = artifact["networks"][network_id]["address"]
-    abi = artifact["abi"]
-
-    contract = w3.eth.contract(address=address, abi=abi)
-    
-    # Set Admin (First account from Ganache)
-    if w3.eth.accounts:
-        admin_account = w3.eth.accounts[0]
+        # Initialize Contract
+        contract = w3.eth.contract(address=w3.to_checksum_address(address), abi=abi)
         
-    print(f"[SUCCESS] Contract loaded at {address}")
-    return contract
+        # Set Admin (From .env private key or Ganache first account)
+        env_priv_key = os.getenv("PRIVATE_KEY")
+        if env_priv_key:
+            from eth_account import Account
+            admin_account = Account.from_key(env_priv_key).address
+            print(f"[INFO] Admin account set from Private Key: {admin_account}")
+        elif is_connected and w3.eth.accounts:
+            admin_account = w3.eth.accounts[0]
+            print(f"[INFO] Admin account set from Ganache: {admin_account}")
+            
+        print(f"[SUCCESS] Blockchain service initialized. Contract: {address}")
+        
+        # Display Balance
+        if admin_account and is_connected:
+            balance_wei = w3.eth.get_balance(admin_account)
+            balance_eth = w3.from_wei(balance_wei, 'ether')
+            print(f"[WALLET] Admin Address: {admin_account}")
+            print(f"[WALLET] Admin Balance: {balance_eth} ETH")
+
+        return contract
+    except Exception as e:
+        print(f"[ERROR] Failed to load contract: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
 
 # Load immediately
 load_contract()

@@ -54,8 +54,14 @@ const DonorDashboard: React.FC<DonorDashboardProps> = ({ reports, donations, onD
     setLoading(true);
     try {
       const { blockchainService } = await import("../services/blockchainService");
-      // 1. Convert INR to approx ETH (Demo: 1 ETH = 2,50,000 INR)
-      const ethAmount = (amount / 250000).toFixed(6);
+
+      // If amount is small (like 0.1), assume it's ETH. If large (like 5000), it's INR.
+      // This is a helper for the demo.
+      const ethAmount = amount < 5 ? amount.toString() : (amount / 250000).toFixed(6);
+
+      if (parseFloat(ethAmount) <= 0) {
+        throw new Error("Amount too small for conversion.");
+      }
 
       alert(`Connecting to MetaMask to send ${ethAmount} ETH...`);
       const txHash = await blockchainService.donate(ethAmount);
@@ -63,7 +69,7 @@ const DonorDashboard: React.FC<DonorDashboardProps> = ({ reports, donations, onD
       onDonate({
         id: Math.random().toString(),
         reportId: selectedReport.id,
-        amount,
+        amount: amount < 5 ? amount * 250000 : amount, // Store as INR for history
         date: new Date().toLocaleString(),
         blockchainHash: txHash,
         donorId: 'anonymous' // For demo
@@ -345,7 +351,9 @@ const DonorDashboard: React.FC<DonorDashboardProps> = ({ reports, donations, onD
                 ))}
               </div>
               <div className="relative group">
-                <span className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-slate-300 group-focus-within:text-indigo-600 transition-colors">₹</span>
+                <span className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-slate-300 group-focus-within:text-indigo-600 transition-colors">
+                  {amount > 0 && amount < 5 ? "Ξ" : "₹"}
+                </span>
                 <input
                   type="number"
                   placeholder="Custom Mission Amount"
@@ -363,7 +371,11 @@ const DonorDashboard: React.FC<DonorDashboardProps> = ({ reports, donations, onD
                   </div>
                   <div>
                     <p className="text-[10px] font-black uppercase text-emerald-600 tracking-widest">Impact Projection</p>
-                    <p className="text-sm font-bold text-emerald-900">This donation will provide relief kits for approx. <span className="text-emerald-600">{(amount / 500).toFixed(0)} families</span>.</p>
+                    <p className="text-sm font-bold text-emerald-900">
+                      This donation will provide relief kits for approx. <span className="text-emerald-600">
+                        {amount < 5 ? (amount * 500).toFixed(0) : (amount / 500).toFixed(0)} families
+                      </span>.
+                    </p>
                   </div>
                 </div>
               )}

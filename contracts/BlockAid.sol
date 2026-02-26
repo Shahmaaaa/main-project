@@ -16,8 +16,8 @@ contract BlockAid {
     mapping(string => DisasterReport) public reports;
     address public admin;
 
-    event ReportCreated(string id, address recipient, uint256 timestamp);
-    event ReportApproved(string id, uint256 amountReleased, address recipient);
+    event ReportCreated(string id, string dataHash, uint256 timestamp);
+    event ReportApproved(string id, string severity, uint256 amount, address approver);
     event FundsReceived(address from, uint256 amount);
 
     constructor() {
@@ -46,7 +46,7 @@ contract BlockAid {
             timestamp: block.timestamp
         });
 
-        emit ReportCreated(_id, _recipient, block.timestamp);
+        emit ReportCreated(_id, _dataHash, block.timestamp);
     }
 
     function approveReport(string memory _id, string memory _severity, uint256 _amount) public onlyAdmin {

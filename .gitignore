@@ -32,7 +32,19 @@ instance/
 *.db
 
 # =====================
+# Environment / Secrets
+# =====================
+.env
+.env.*
+*.secret
+*.pem
+*.key
+
+# =====================
 # ML Models
 # =====================
 *.keras
 *.h5
+*.model
+*.weights
+*.pkl

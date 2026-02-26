@@ -67,20 +67,24 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ reports, onDelete }) =>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {reports.filter(r => r.status === 'Pending').map((report) => (
+              {reports?.filter(r => r.status === 'Pending').map((report) => (
                 <tr key={report.id} className="hover:bg-slate-50 transition-colors">
                   <td className="px-6 py-4">
-                    <img src={report.images[0]} alt="Evidence" className="w-16 h-12 object-cover rounded-lg shadow-sm border border-slate-200" />
+                    <img
+                      src={report.images?.[0] || 'https://via.placeholder.com/150'}
+                      alt="Evidence"
+                      className="w-16 h-12 object-cover rounded-lg shadow-sm border border-slate-200"
+                    />
                   </td>
                   <td className="px-6 py-4">
-                    <div className="font-bold text-slate-900">{report.type}</div>
-                    <div className="text-xs text-slate-500">{report.location.district}, {report.location.state}</div>
+                    <div className="font-bold text-slate-900">{report.type || 'Unknown'}</div>
+                    <div className="text-xs text-slate-500">{report.location?.district || 'N/A'}, {report.location?.state || 'N/A'}</div>
                   </td>
                   <td className="px-6 py-4">
-                    <SeverityBadge severity={report.severityAI} />
+                    <SeverityBadge severity={report.severityAI || 'Low'} />
                   </td>
                   <td className="px-6 py-4 text-sm text-slate-600">
-                    {report.userName}
+                    {report.userName || 'Anonymous'}
                   </td>
                   <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
                     <button

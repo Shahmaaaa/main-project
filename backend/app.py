@@ -40,8 +40,9 @@ db = SQLAlchemy(app)
 
 # ---------------- LOAD MODEL ----------------
 
-model = tf.keras.models.load_model("floodmodel.keras")
-print("[SUCCESS] Model loaded successfully")
+model_path = os.path.join(os.path.dirname(__file__), "floodmodel.keras")
+model = tf.keras.models.load_model(model_path)
+print(f"[SUCCESS] Model loaded from {model_path}")
 
 CLASSES = ["Low", "Medium", "High"]  # MUST match training order
 
@@ -339,11 +340,11 @@ def update_report(id):
     
 @app.route("/api/blockchain/config", methods=["GET"])
 def get_blockchain_config():
-    from blockchain import contract
+    from blockchain import contract, GANACHE_URL
     if contract:
         return jsonify({
             "address": contract.address,
-            "url": "http://127.0.0.1:7545" # Ganache
+            "url": GANACHE_URL
         })
     return jsonify({"error": "Contract not loaded"}), 404
 
