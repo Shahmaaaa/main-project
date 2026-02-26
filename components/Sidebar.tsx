@@ -162,7 +162,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role, onLogout }) => {
           <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">Network Status</p>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-xs text-slate-300 font-medium">Mainnet Online</span>
+            <span className="text-xs text-slate-300 font-medium">Localhost 7545</span>
           </div>
         </div>
 

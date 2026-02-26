@@ -118,7 +118,7 @@ const AdminVerifiedReports: React.FC<Props> = ({ reports }) => {
                     <span className="text-emerald-500 italic">Secured</span>
                   </div>
                   <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 font-mono text-[10px] text-slate-500 truncate">
-                    {report.blockchainHash || "0x7d2...f9e2 (Mainnet Syncing)"}
+                    {report.blockchainHash || "0x7d2...f9e2 (Localhost Syncing)"}
                   </div>
                 </div>
               </div>

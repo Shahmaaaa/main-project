@@ -37,6 +37,8 @@ export interface DisasterReport {
     images: string[];
   }[];
   userWallet?: string;
+  targetAmount?: number; // In ETH
+  raisedAmount?: number; // In ETH
   userId: string;
   userName: string;
 }
@@ -55,4 +57,5 @@ export interface Donation {
   date: string;
   blockchainHash?: string;
   donorId: string;
+  recipientWallet?: string;
 }

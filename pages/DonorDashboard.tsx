@@ -268,10 +268,15 @@ const DonorDashboard: React.FC<DonorDashboardProps> = ({ reports, donations, onD
                         <span className="text-[8px] text-slate-400 font-bold uppercase tracking-widest">{new Date(d.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                       </div>
                       <p className="text-[10px] text-slate-900 font-bold leading-tight">Supported {reports.find(r => r.id === d.reportId)?.location.area}</p>
-                      {d.blockchainHash && (
+                      {d.blockchainHash ? (
                         <div className="mt-2 flex items-center gap-1">
                           <div className="w-1 h-1 bg-emerald-500 rounded-full" />
                           <span className="text-[8px] font-mono text-slate-400 truncate">{d.blockchainHash.slice(0, 20)}...</span>
+                        </div>
+                      ) : (
+                        <div className="mt-2 flex items-center gap-1">
+                          <div className="w-1 h-1 bg-orange-500 rounded-full" />
+                          <span className="text-[8px] font-mono text-slate-400 truncate">0x7d2...f9e2 (Localhost Syncing)</span>
                         </div>
                       )}
                     </div>
@@ -399,7 +404,7 @@ const DonorDashboard: React.FC<DonorDashboardProps> = ({ reports, donations, onD
                 Go Back
               </button>
             </div>
-            <p className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">Transacted via Ethereum Mainnet Layer</p>
+            <p className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">Transacted via Local Blockchain Node</p>
           </div>
         </div>
       )}
